@@ -670,7 +670,7 @@
 <div id="page-outlook" class="page active">
 
   <div class="narrative">
-    The warranty portfolio comprises <strong>302 projects across 8 product lines</strong> spanning <strong>2017&ndash;2025 install dates</strong>. Active warranty obligations total <strong>264 projects</strong>; <strong>38 projects</strong> have no warranty documentation on file representing <strong>$33.7M sold material value</strong>. The most critical distinction surfaced in this view is between <strong>obligation runoff</strong> (long-tail racking/foundation, 20&ndash;25 year terms) and <strong>claim-risk runoff</strong> (short-tail component/workmanship, 1&ndash;10 year terms) &mdash; the two curves diverge by a decade or more for most product lines.
+    The warranty portfolio comprises <strong>301 projects across 7 product lines</strong> spanning <strong>2017&ndash;2025 install dates</strong>. Active warranty obligations total <strong>264 projects</strong>; <strong>38 projects</strong> have no warranty documentation on file representing <strong>$33.7M sold material value</strong>. The most critical distinction surfaced in this view is between <strong>obligation runoff</strong> (long-tail racking/foundation, 20&ndash;25 year terms) and <strong>claim-risk runoff</strong> (short-tail component/workmanship, 1&ndash;10 year terms) &mdash; the two curves diverge by a decade or more for most product lines.
     <span class="note">For every product line, the short-term warranties (component 5&ndash;10 yr, workmanship 1&ndash;5 yr) are where claim activity actually concentrates. Click any <span style="color:var(--accent)">&#9432;</span> for calculation details.</span>
   </div>
 
@@ -733,10 +733,10 @@
   <div class="kpi-ribbon">
     <div class="kpi-card blue">
       <div class="kpi-label">Portfolio Universe <span class="kpi-info" onclick="toggleTip(event,'k1')">&#9432;</span></div>
-      <div class="kpi-value">302</div>
-      <div class="kpi-sub">total projects across 8 lines</div>
+      <div class="kpi-value">301</div>
+      <div class="kpi-sub">total projects across 7 lines</div>
       <div class="kpi-popup" id="k1">
-        <strong>302 projects in the warranty portfolio.</strong> Span install dates 2017&ndash;2025. Eight product lines: TerraTrak (107), SunFlower (149), Wave (25), Agile (10), Fuse (8), Glide (1), Canopy (1), plus 1 unassigned.
+        <strong>301 projects in the warranty portfolio.</strong> Span install dates 2017&ndash;2025. Seven product lines: TerraTrak (107), SunFlower (149), Wave (25), Agile (10), Fuse (8), Glide (1), Canopy (1).
       </div>
     </div>
 
@@ -1121,7 +1121,7 @@
 
   <div class="chart-card" style="margin-bottom:20px;">
     <div class="chart-title">Portfolio Documentation Completeness</div>
-    <div class="chart-insight">38 of 302 projects (<em>12.6%</em>) have no warranty dates on file. <strong>$33.7M in sold material value</strong> sits behind that gap. Coverage almost certainly exists in original POs &mdash; this is a records-completeness issue, not a coverage absence.</div>
+    <div class="chart-insight">38 of 301 projects (<em>12.6%</em>) have no warranty dates on file. <strong>$33.7M in sold material value</strong> sits behind that gap. Coverage almost certainly exists in original POs &mdash; this is a records-completeness issue, not a coverage absence.</div>
 
     <div style="margin-top:18px;">
       <div class="doc-row">
@@ -1166,7 +1166,7 @@
    DATA
 =========================================================== */
 
-// Portfolio summary by product line (from row-level data, 302 projects)
+// Portfolio summary by product line (from row-level data, 301 categorized projects)
 const PORTFOLIO = {
   'TerraTrak':  { count: 107, sp: 90, mo: 17, undocCount: 28, undocValue: 29321958, totalValue: 182101457 },
   'SunFlower':  { count: 149, sp: 97, mo: 52, undocCount: 2,  undocValue: 882105,    totalValue: 133728126 },
@@ -1363,7 +1363,7 @@ const tickColor = '#64748b';
       cutout: '60%',
       plugins: {
         legend: { position: 'bottom', labels: { padding: 8, boxWidth: 10, color: '#94a3b8', font: { size: 10 } } },
-        tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw} projects (${(ctx.raw/302*100).toFixed(1)}%)` } }
+        tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw} projects (${(ctx.raw/301*100).toFixed(1)}%)` } }
       }
     }
   });
