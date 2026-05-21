@@ -1310,6 +1310,32 @@ const gridColor = 'rgba(255,255,255,.04)';
 const tickColor = '#64748b';
 
 /* ===========================================================
+   CUSTOM TOOLTIP POSITIONER for runoff charts
+   ===========================================================
+   Default Chart.js tooltip floats near the cursor, which on
+   smooth-line charts covers the year axis when you hover. This
+   positioner places the tooltip at a stable mid-chart height,
+   offset to the right of the hovered year, swapping to the left
+   when the cursor approaches the right edge so the tooltip stays
+   on-screen and never covers adjacent year labels.
+=========================================================== */
+Chart.Tooltip.positioners.midRunoff = function(items, eventPosition) {
+  if (!items.length) return false;
+  const chart = this.chart;
+  const ca = chart.chartArea;
+  const tooltipWidth = (this.width || 200);
+  const point = items[0].element;          // the actual data point (year position)
+  const xPoint = point.x;
+  const midY = ca.top + (ca.bottom - ca.top) * 0.42;  // ~mid-height, biased slightly up
+
+  // Decide left/right of the hovered year based on where we are on the timeline
+  const flipToLeft = (xPoint + tooltipWidth + 30) > ca.right;
+  const xOut = flipToLeft ? xPoint - tooltipWidth - 18 : xPoint + 18;
+
+  return { x: xOut, y: midY };
+};
+
+/* ===========================================================
    PAGE 1 CHARTS
 =========================================================== */
 
@@ -1380,17 +1406,19 @@ const tickColor = '#64748b';
     borderWidth: 2.25,
     fill: true,
     tension: 0.35,
-    pointRadius: 0,
-    pointHoverRadius: 4,
+    pointRadius: 2.5,
+    pointHoverRadius: 6,
+    pointHoverBorderWidth: 2,
     pointBackgroundColor: COLORS[l],
-    pointBorderColor: COLORS[l]
+    pointBorderColor: COLORS[l],
+    pointHitRadius: 18
   }));
   new Chart(document.getElementById('claimRiskCurve'), {
     type: 'line',
     data: { labels: RUNOFF_YEARS, datasets: datasets },
     options: {
       responsive: true, maintainAspectRatio: false,
-      interaction: { mode: 'index', intersect: false },
+      interaction: { mode: 'nearest', axis: 'x', intersect: false },
       scales: {
         x: { grid: { color: gridColor }, ticks: { maxRotation: 0, color: tickColor },
              title: { display: true, text: 'Year (Jan 1 snapshot)', color: '#64748b', font: { size: 10 } } },
@@ -1399,7 +1427,21 @@ const tickColor = '#64748b';
       },
       plugins: {
         legend: { position: 'bottom', labels: { padding: 10, boxWidth: 10, color: '#94a3b8', font: { size: 10 } } },
-        tooltip: { callbacks: { title: items => 'Jan 1, ' + items[0].label, label: ctx => ` ${ctx.dataset.label}: ${ctx.raw} projects` } }
+        tooltip: {
+          mode: 'index', axis: 'x', intersect: false,
+          position: 'midRunoff',
+          backgroundColor: 'rgba(20,25,32,0.96)',
+          borderColor: 'rgba(56,189,248,0.35)',
+          borderWidth: 1,
+          padding: 10,
+          titleColor: '#38bdf8',
+          titleFont: { family: "'IBM Plex Mono', monospace", size: 11, weight: '600' },
+          bodyColor: '#e2e8f0',
+          bodyFont: { family: "'IBM Plex Mono', monospace", size: 11 },
+          boxPadding: 4,
+          caretSize: 0,
+          callbacks: { title: items => 'Jan 1, ' + items[0].label, label: ctx => ` ${ctx.dataset.label}: ${ctx.raw} projects` }
+        }
       }
     }
   });
@@ -1416,17 +1458,19 @@ const tickColor = '#64748b';
     borderWidth: 2.25,
     fill: true,
     tension: 0.35,
-    pointRadius: 0,
-    pointHoverRadius: 4,
+    pointRadius: 2.5,
+    pointHoverRadius: 6,
+    pointHoverBorderWidth: 2,
     pointBackgroundColor: COLORS[l],
-    pointBorderColor: COLORS[l]
+    pointBorderColor: COLORS[l],
+    pointHitRadius: 18
   }));
   new Chart(document.getElementById('obligationCurve'), {
     type: 'line',
     data: { labels: RUNOFF_YEARS, datasets: datasets },
     options: {
       responsive: true, maintainAspectRatio: false,
-      interaction: { mode: 'index', intersect: false },
+      interaction: { mode: 'nearest', axis: 'x', intersect: false },
       scales: {
         x: { grid: { color: gridColor }, ticks: { maxRotation: 0, color: tickColor },
              title: { display: true, text: 'Year (Jan 1 snapshot)', color: '#64748b', font: { size: 10 } } },
@@ -1435,7 +1479,21 @@ const tickColor = '#64748b';
       },
       plugins: {
         legend: { position: 'bottom', labels: { padding: 10, boxWidth: 10, color: '#94a3b8', font: { size: 10 } } },
-        tooltip: { callbacks: { title: items => 'Jan 1, ' + items[0].label, label: ctx => ` ${ctx.dataset.label}: ${ctx.raw} projects` } }
+        tooltip: {
+          mode: 'index', axis: 'x', intersect: false,
+          position: 'midRunoff',
+          backgroundColor: 'rgba(20,25,32,0.96)',
+          borderColor: 'rgba(56,189,248,0.35)',
+          borderWidth: 1,
+          padding: 10,
+          titleColor: '#38bdf8',
+          titleFont: { family: "'IBM Plex Mono', monospace", size: 11, weight: '600' },
+          bodyColor: '#e2e8f0',
+          bodyFont: { family: "'IBM Plex Mono', monospace", size: 11 },
+          boxPadding: 4,
+          caretSize: 0,
+          callbacks: { title: items => 'Jan 1, ' + items[0].label, label: ctx => ` ${ctx.dataset.label}: ${ctx.raw} projects` }
+        }
       }
     }
   });
@@ -1459,9 +1517,12 @@ function buildLifecycleCharts() {
           borderWidth: 2.25,
           fill: true,
           tension: 0.35,
-          pointRadius: 0,
-          pointHoverRadius: 4,
-          pointBackgroundColor: '#f59e0b'
+          pointRadius: 2.5,
+          pointHoverRadius: 6,
+          pointHoverBorderWidth: 2,
+          pointBackgroundColor: '#f59e0b',
+          pointBorderColor: '#f59e0b',
+          pointHitRadius: 18
         },
         {
           label: 'Claim-Risk Active (component/workmanship)',
@@ -1471,15 +1532,18 @@ function buildLifecycleCharts() {
           borderWidth: 2.25,
           fill: true,
           tension: 0.35,
-          pointRadius: 0,
-          pointHoverRadius: 4,
-          pointBackgroundColor: '#ef4444'
+          pointRadius: 2.5,
+          pointHoverRadius: 6,
+          pointHoverBorderWidth: 2,
+          pointBackgroundColor: '#ef4444',
+          pointBorderColor: '#ef4444',
+          pointHitRadius: 18
         }
       ]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
-      interaction: { mode: 'index', intersect: false },
+      interaction: { mode: 'nearest', axis: 'x', intersect: false },
       scales: {
         x: { grid: { color: gridColor }, ticks: { color: tickColor },
              title: { display: true, text: 'Year', color: '#64748b', font: { size: 10 } } },
@@ -1488,7 +1552,21 @@ function buildLifecycleCharts() {
       },
       plugins: {
         legend: { position: 'bottom', labels: { padding: 12, boxWidth: 10, color: '#94a3b8', font: { size: 10 } } },
-        tooltip: { callbacks: { title: items => 'Jan 1, ' + items[0].label, label: ctx => ` ${ctx.dataset.label}: ${ctx.raw} projects` } }
+        tooltip: {
+          mode: 'index', axis: 'x', intersect: false,
+          position: 'midRunoff',
+          backgroundColor: 'rgba(20,25,32,0.96)',
+          borderColor: 'rgba(245,158,11,0.4)',
+          borderWidth: 1,
+          padding: 10,
+          titleColor: '#f59e0b',
+          titleFont: { family: "'IBM Plex Mono', monospace", size: 11, weight: '600' },
+          bodyColor: '#e2e8f0',
+          bodyFont: { family: "'IBM Plex Mono', monospace", size: 11 },
+          boxPadding: 4,
+          caretSize: 0,
+          callbacks: { title: items => 'Jan 1, ' + items[0].label, label: ctx => ` ${ctx.dataset.label}: ${ctx.raw} projects` }
+        }
       }
     }
   });
