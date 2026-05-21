@@ -674,9 +674,9 @@
     <span class="note">For every product line, the short-term warranties (component 5&ndash;10 yr, workmanship 1&ndash;5 yr) are where claim activity actually concentrates. Click any <span style="color:var(--accent)">&#9432;</span> for calculation details.</span>
   </div>
 
-  <div class="callout amber" style="margin-bottom:20px;">
-    <div class="callout-kicker">&#9888; Data Freshness Note</div>
-    <p>Underlying data reflects the <strong>April 8, 2026</strong> snapshot from the Claims Expenditure Dashboard and the <strong>April 16, 2026</strong> snapshot from the Warranty Intelligence Dashboard. The dashboard build date (May 20, 2026) is separate from the data-as-of date. Figures here have not yet been refreshed to reflect activity from April&ndash;May 2026.</p>
+  <!-- 2026 YTD ACTIVITY HEADLINE -->
+  <div style="background: linear-gradient(180deg, rgba(56,189,248,0.05) 0%, rgba(56,189,248,0.02) 100%); border: 1px solid rgba(56,189,248,0.18); border-left: 3px solid var(--accent); border-radius: 6px; padding: 16px 20px; margin-bottom: 20px; font-size: 13.5px; line-height: 1.65; color: var(--text);">
+    As of <strong>April 8, 2026</strong>, Terrasmart has spent <strong>$415,763</strong> on warranty claims in 2026 YTD across <strong>190 claims</strong> (169 approved, 21 denied), compared to <strong>$7,535,164</strong> for the full year 2025 across <strong>411 claims</strong>. <strong>TerraTrak-2P</strong> is the dominant cost driver in both years, representing <strong>78% of 2026 spend</strong>. The 2026 YTD figure is expected to be substantially lower than 2025 full-year totals &mdash; <strong>year-over-year comparisons should be interpreted with caution</strong> given that 2026 data covers only a partial year (Q1 + early Q2).
   </div>
 
   <div class="method-panel">
@@ -1128,12 +1128,6 @@
     <div class="chart-context"><strong>How to read this:</strong> Each bar = % of that product line's projects with no warranty dates on file. Red &ge;30%, amber 10&ndash;30%, green &lt;10%. Dollar figures represent POS material value of the undocumented projects &mdash; the exposure carried until coverage is verified from primary documents.</div>
   </div>
 
-  <div class="callout green">
-    <div class="callout-kicker">&#10148; Suggested Next Steps</div>
-    <p><strong>Records recovery sprint</strong> &mdash; the documentation gap is a near-zero-engineering-cost remediation. Locate the original PO or sales agreement for each of the 38 projects, confirm warranty language, enter effective dates. Closes the open documentation position. <strong>Fuse first</strong> (smallest fleet, highest gap %), then <strong>TerraTrak</strong> (largest dollar exposure).</p>
-    <p style="margin-top:6px;"><strong>Row-level claim ledger</strong> &mdash; once standing, every per-claim and per-customer metric in this dashboard becomes sharper. The current aggregated data layer limits how granular our internal reporting can go. Foundational for any future Quality / Finance / Legal cross-functional reporting.</p>
-  </div>
-
 </div>
 
 <script>
@@ -1473,8 +1467,8 @@ function buildLifecycleCharts() {
    PAGE 3 CHARTS (lazy)
 =========================================================== */
 function buildCoverageCharts() {
-  // Avg cost per claim by product line - ASCENDING by avg cost (low → high)
-  const labels = ['Fuse', 'Agile', 'TerraTrak-1P', 'TerraTrak-2P', 'SunFlower', 'Wave'];
+  // Avg cost per claim by product line - DESCENDING by avg cost (high → low, left to right)
+  const labels = ['Wave', 'SunFlower', 'TerraTrak-2P', 'TerraTrak-1P', 'Agile', 'Fuse'];
   const avgs   = labels.map(l => CLAIMS[l].claims25 > 0 ? CLAIMS[l].spend25 / CLAIMS[l].claims25 : 0);
   const counts = labels.map(l => CLAIMS[l].claims25);
   const portfolioAvg = 7535164 / 411;
